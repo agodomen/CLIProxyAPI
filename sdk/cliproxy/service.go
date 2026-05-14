@@ -1209,6 +1209,11 @@ func (s *Service) registerModelsForAuth(a *coreauth.Auth) {
 				if strings.EqualFold(compat.Name, compatName) {
 					isCompatAuth = true
 					ms := buildOpenAICompatibilityConfigModels(compat)
+					// Apply excluded-models for OpenAI-compatibility providers
+					if authKind == "apikey" {
+						excluded = compat.ExcludedModels
+					}
+					ms = applyExcludedModels(ms, excluded)
 					// Register and return
 					if len(ms) > 0 {
 						if providerKey == "" {
