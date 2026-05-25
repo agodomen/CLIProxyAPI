@@ -62,8 +62,10 @@ func PreserveReasoningContent(body []byte) []byte {
 			// so null does not overwrite a prior non-empty latestReasoning.
 			// hasSeenReasoning is still set to true, enabling injection for
 			// subsequent assistant messages that lack reasoning_content.
+			// We use TrimSpace only to check for emptiness; the original
+			// rc.String() value is preserved verbatim per provider requirement.
 			if rcText := strings.TrimSpace(rc.String()); rcText != "" {
-				latestReasoning = rcText
+				latestReasoning = rc.String()
 			}
 			hasSeenReasoning = true
 			continue
